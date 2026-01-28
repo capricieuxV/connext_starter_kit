@@ -68,11 +68,14 @@ target_link_libraries(fixed_image_flat_zc
         RTIConnextDDS::cpp2_api
         RTIConnextDDS::distributed_logger_cpp2
         RTIConnextDDS::metp  # Required for zero-copy API
-        dl
         m
         pthread
-        rt
 )
+
+# Linux-specific system libraries (not available on macOS)
+if(UNIX AND NOT APPLE)
+    target_link_libraries(fixed_image_flat_zc PRIVATE dl rt)
+endif()
 
 # Set compiler definitions
 target_compile_definitions(fixed_image_flat_zc

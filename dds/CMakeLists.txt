@@ -249,8 +249,14 @@ if(BUILD_CXX_TYPES_LIBRARY AND GENERATE_CXX11_TYPES)
     )
     
     # Link RTI Connext DDS
+    # NOTE:
+    # The generated type plugins for flat-data / METP-enabled types
+    # (e.g., FinalFlatImage, FinalFlatPointCloud) depend on the METP
+    # library, which provides the METypePlugin_* symbols.
     target_link_libraries(dds_typesupport
-        PUBLIC RTIConnextDDS::cpp2_api
+        PUBLIC
+            RTIConnextDDS::cpp2_api
+            RTIConnextDDS::metp
     )
     
     # Compiler settings

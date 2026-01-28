@@ -67,11 +67,14 @@ target_link_libraries(command_override
         RTIConnextDDS::cpp2_api
         RTIConnextDDS::distributed_logger_cpp2
         RTIConnextDDS::metp  # Required for ZeroCopy types used by other apps in library
-        dl
         m
         pthread
-        rt
 )
+
+# Linux-specific system libraries (not available on macOS)
+if(UNIX AND NOT APPLE)
+    target_link_libraries(command_override PRIVATE dl rt)
+endif()
 
 # Set compiler definitions
 target_compile_definitions(command_override

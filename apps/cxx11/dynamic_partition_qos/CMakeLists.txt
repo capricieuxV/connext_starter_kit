@@ -68,11 +68,14 @@ target_link_libraries(dynamic_partition_qos
         RTIConnextDDS::cpp2_api
         RTIConnextDDS::distributed_logger_cpp2
         RTIConnextDDS::metp
-        dl
         m
         pthread
-        rt
 )
+
+# Linux-specific system libraries (not available on macOS)
+if(UNIX AND NOT APPLE)
+    target_link_libraries(dynamic_partition_qos PRIVATE dl rt)
+endif()
 
 # Set compiler definitions
 target_compile_definitions(dynamic_partition_qos

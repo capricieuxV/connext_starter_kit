@@ -69,11 +69,14 @@ target_link_libraries(large_data_app
         RTIConnextDDS::cpp2_api
         RTIConnextDDS::distributed_logger_cpp2
         RTIConnextDDS::metp  # Required for ZeroCopy types used by other apps in library
-        dl
         m
         pthread
-        rt
 )
+
+# Linux-specific system libraries (not available on macOS)
+if(UNIX AND NOT APPLE)
+    target_link_libraries(large_data_app PRIVATE dl rt)
+endif()
 
 # Set compiler definitions
 target_compile_definitions(large_data_app
