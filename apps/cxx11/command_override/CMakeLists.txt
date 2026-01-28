@@ -83,14 +83,25 @@ target_compile_definitions(command_override
 
 # Set additional compiler flags
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(command_override PRIVATE
-        -m64
-        -Wall
-        -Wextra
-        -Wno-unused-parameter
-        -no-pie
-        -rdynamic
-    )
+    # Only add -m64 for x86_64 architectures (not needed for ARM64/aarch64)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i386|i686")
+        target_compile_options(command_override PRIVATE
+            -m64
+            -Wall
+            -Wextra
+            -Wno-unused-parameter
+            -no-pie
+            -rdynamic
+        )
+    else()
+        target_compile_options(command_override PRIVATE
+            -Wall
+            -Wextra
+            -Wno-unused-parameter
+            -no-pie
+            -rdynamic
+        )
+    endif()
 endif()
 
 # Print information

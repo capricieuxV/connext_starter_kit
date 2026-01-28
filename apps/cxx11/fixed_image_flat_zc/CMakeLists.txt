@@ -84,14 +84,25 @@ target_compile_definitions(fixed_image_flat_zc
 
 # Set additional compiler flags
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(fixed_image_flat_zc PRIVATE
-        -m64
-        -Wall
-        -Wextra
-        -Wno-unused-parameter
-        -no-pie
-        -rdynamic
-    )
+    # Only add -m64 for x86_64 architectures (not needed for ARM64/aarch64)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i386|i686")
+        target_compile_options(fixed_image_flat_zc PRIVATE
+            -m64
+            -Wall
+            -Wextra
+            -Wno-unused-parameter
+            -no-pie
+            -rdynamic
+        )
+    else()
+        target_compile_options(fixed_image_flat_zc PRIVATE
+            -Wall
+            -Wextra
+            -Wno-unused-parameter
+            -no-pie
+            -rdynamic
+        )
+    endif()
 endif()
 
 # Print information
