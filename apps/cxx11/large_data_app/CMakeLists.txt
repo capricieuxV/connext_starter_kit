@@ -35,18 +35,17 @@ find_package(RTIConnextDDS
 )
 
 # Set up directories
-set(DDS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../dds/build")
+# See note in `burst_large_data_app/CMakeLists.txt`:
+# DDS build artifacts live under the top-level build directory's `dds`
+# subfolder, not under the source tree at `dds/build`.
+set(DDS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/dds")
 set(DDS_LIB_BUILD_DIR "${DDS_BUILD_DIR}/lib")
 set(DDS_CODEGEN_DIR "${DDS_BUILD_DIR}/cxx11_gen")
 set(DDS_UTILS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../dds/utils/cxx11")
 
-# Find the shared libraries
-find_library(DDS_TYPESUPPORT_LIB 
-    NAMES dds_typesupport
-    PATHS ${DDS_LIB_BUILD_DIR}
-    NO_DEFAULT_PATH
-    REQUIRED
-)
+# Use the `dds_typesupport` CMake target provided by the `dds` subdirectory
+# instead of searching the filesystem for the compiled library.
+set(DDS_TYPESUPPORT_LIB dds_typesupport)
 
 # Create the executable
 add_executable(large_data_app

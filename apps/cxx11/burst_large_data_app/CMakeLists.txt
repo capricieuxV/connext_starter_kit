@@ -35,19 +35,22 @@ find_package(RTIConnextDDS
 )
 
 # Set up directories
-set(DDS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../dds/build")
+# NOTE:
+# The DDS typesupport library and generated code are produced in the main
+# CMake build tree under the `dds` subdirectory, i.e.
+#   <starter_kit_root>/build/dds/...
+# rather than inside the source tree at `dds/build`.
+# Point `DDS_BUILD_DIR` to that binary directory so the applications can
+# locate the generated headers and the `dds_typesupport` shared library.
+set(DDS_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/dds")
 set(DDS_LIB_BUILD_DIR "${DDS_BUILD_DIR}/lib")
 set(DDS_CODEGEN_DIR "${DDS_BUILD_DIR}/cxx11_gen")
 set(DDS_UTILS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../dds/utils/cxx11")
 
 
-# Find the shared libraries
-find_library(DDS_TYPESUPPORT_LIB 
-    NAMES dds_typesupport
-    PATHS ${DDS_LIB_BUILD_DIR}
-    NO_DEFAULT_PATH
-    REQUIRED
-)
+# Use the `dds_typesupport` target built in the `dds` subdirectory of the
+# top-level project instead of searching for a prebuilt library on disk.
+set(DDS_TYPESUPPORT_LIB dds_typesupport)
 
 # Define the list of executables
 set(EXECUTABLES burst_publisher burst_subscriber)
